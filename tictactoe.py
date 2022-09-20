@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+from re import S
 
 X = "X"
 O = "O"
@@ -22,8 +23,8 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    #if terminal(board):
-    #    return EMPTY
+    if terminal(board):
+        return EMPTY
     x = 0
     o = 0
     for list in board:
@@ -41,8 +42,17 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    s = set()
+    if terminal(board):
+        return s 
 
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] == EMPTY:
+                s.add((i,j))
+
+    return s 
+    
 
 def result(board, action):
     """
