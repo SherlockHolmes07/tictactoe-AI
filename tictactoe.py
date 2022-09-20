@@ -2,6 +2,7 @@
 Tic Tac Toe Player
 """
 
+from json.encoder import INFINITY
 import math
 from re import S
 import copy
@@ -124,4 +125,58 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+    
+    curr_player = player(board)
+    all_actions = actions(board)
+    
+    if curr_player == X:
+
+        lar_value = -9999
+        ans = tuple()
+
+        for action in all_actions:
+            val = Minimize(result(board,action))
+
+            if val > lar_value:
+                ans = action
+                lar_value = val
+        return ans
+
+    else:
+        small_value = 9999 
+        ans = tuple()
+        for action in all_actions:
+            val = Maximize(result(board,action))
+            if val < small_value:
+                small_value = val
+                ans = action
+        return ans
+
+
+
+def Maximize(board):
+
+    if terminal(board):
+        return utility(board)
+    
+    value = -9999
+
+    for action in actions(board):
+        value = max(value,Minimize(result(board,action)))
+
+    return value
+
+
+def Minimize(board):
+
+    if terminal(board):
+        return utility(board)
+    
+    value = 9999
+
+    for action in actions(board):
+        value = min(value,Maximize(result(board,action)))
+
+    return value
