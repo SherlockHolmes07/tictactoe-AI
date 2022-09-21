@@ -137,7 +137,7 @@ def minimax(board):
         ans = tuple()
 
         for action in all_actions:
-            val = Minimize(result(board,action))
+            val = Minimize(result(board,action), lar_value)
 
             if val > lar_value:
                 ans = action
@@ -148,7 +148,7 @@ def minimax(board):
         small_value = 9999 
         ans = tuple()
         for action in all_actions:
-            val = Maximize(result(board,action))
+            val = Maximize(result(board,action), small_value)
             if val < small_value:
                 small_value = val
                 ans = action
@@ -156,7 +156,7 @@ def minimax(board):
 
 
 
-def Maximize(board):
+def Maximize(board, val):
 
     if terminal(board):
         return utility(board)
@@ -164,12 +164,14 @@ def Maximize(board):
     value = -9999
 
     for action in actions(board):
-        value = max(value,Minimize(result(board,action)))
+        value = max(value,Minimize(result(board,action), value))
+        if value >= val:
+            return value
 
     return value
 
 
-def Minimize(board):
+def Minimize(board, val):
 
     if terminal(board):
         return utility(board)
@@ -177,6 +179,8 @@ def Minimize(board):
     value = 9999
 
     for action in actions(board):
-        value = min(value,Maximize(result(board,action)))
+        value = min(value,Maximize(result(board,action), value))
+        if  value <= val:
+            return value
 
     return value
